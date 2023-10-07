@@ -2,16 +2,27 @@ import Card from '@components/Card/Card'
 import TextField from '@components/TextField/TextField'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AgeForm, ageSchema } from '@schemas/ageSchema'
+import { Age, AgeForm, ageSchema } from '@schemas/ageSchema'
+import { calculate } from '@utils/ageCalculator'
+import { useState } from 'react'
 
 const AgeCalculator = () => {
-  const { control, handleSubmit } = useForm<AgeForm>({
+  const [states, dispatch] = useState<{
+    years: number | null
+    months: number | null
+    date: number | null
+  }>({
+    years: null,
+    months: null,
+    date: null,
+  })
+  const { control, handleSubmit } = useForm<AgeForm, null, Age>({
     resolver: zodResolver(ageSchema),
   })
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
-  })
+  const onSubmit = handleSubmit((data) =>
+    dispatch(calculate(data.year, data.month, data.date))
+  )
 
   return (
     <Card>
@@ -21,7 +32,7 @@ const AgeCalculator = () => {
         id='day'
         type='number'
         control={control}
-        name='day'
+        name='date'
       />
       <TextField
         placeholder='MM'
@@ -41,13 +52,13 @@ const AgeCalculator = () => {
       />
       <button onClick={onSubmit}>SUBMIT</button>
       <h2>
-        <span>--</span> years
+        <span>{states.years ?? '--'}</span> years
       </h2>
       <h2>
-        <span>--</span> months
+        <span>{states.months ?? '--'}</span> months
       </h2>
       <h2>
-        <span>--</span> days
+        <span>{states.date ?? '--'}</span> days
       </h2>
     </Card>
   )
