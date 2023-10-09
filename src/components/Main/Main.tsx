@@ -7,7 +7,8 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6rem 1rem;
+  padding: 1rem;
+  padding-top: 6rem;
 `
 
 export default Main

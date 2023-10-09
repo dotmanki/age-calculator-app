@@ -5,6 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Age, AgeForm, ageSchema } from '@schemas/ageSchema'
 import { calculate } from '@utils/ageCalculator'
 import { useState } from 'react'
+import InputContainer from '@components/TextField/InputContainer'
+import Button from '@components/Button/Button'
+import ButtonContainer from '@components/Button/ButtonContainer'
+import Display from '@components/Display/Display'
 
 const AgeCalculator = () => {
   const [states, dispatch] = useState<{
@@ -26,40 +30,47 @@ const AgeCalculator = () => {
 
   return (
     <Card>
-      <TextField
-        placeholder='DD'
-        label={'DAY'}
-        id='day'
-        type='number'
-        control={control}
-        name='date'
+      <InputContainer control={control}>
+        <TextField
+          placeholder='DD'
+          label={'DAY'}
+          id='day'
+          type='number'
+          control={control}
+          name='date'
+        />
+        <TextField
+          placeholder='MM'
+          label={'MONTH'}
+          id='month'
+          type='number'
+          name='month'
+          control={control}
+        />
+        <TextField
+          placeholder='YYYY'
+          label={'YEAR'}
+          id='year'
+          type='number'
+          name='year'
+          control={control}
+        />
+      </InputContainer>
+      <ButtonContainer>
+        <Button onClick={onSubmit} />
+      </ButtonContainer>
+      <Display
+        primaryText={states.years?.toString() ?? '--'}
+        secondaryText=' years'
       />
-      <TextField
-        placeholder='MM'
-        label={'MONTH'}
-        id='month'
-        type='number'
-        name='month'
-        control={control}
+      <Display
+        primaryText={states.months?.toString() ?? '--'}
+        secondaryText=' months'
       />
-      <TextField
-        placeholder='YYYY'
-        label={'YEAR'}
-        id='year'
-        type='number'
-        name='year'
-        control={control}
+      <Display
+        primaryText={states.date?.toString() ?? '--'}
+        secondaryText=' days'
       />
-      <button onClick={onSubmit}>SUBMIT</button>
-      <h2>
-        <span>{states.years ?? '--'}</span> years
-      </h2>
-      <h2>
-        <span>{states.months ?? '--'}</span> months
-      </h2>
-      <h2>
-        <span>{states.date ?? '--'}</span> days
-      </h2>
     </Card>
   )
 }

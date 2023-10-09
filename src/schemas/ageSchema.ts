@@ -15,7 +15,7 @@ export const ageSchema = z
       .regex(/^\d+$/)
       .transform(Number)
       .refine((date) => date > 0 && date <= 31, {
-        message: 'Must be a valid date',
+        message: 'Must be a valid day',
       }),
     month: z
       .string({ errorMap: errorMap })
@@ -31,15 +31,16 @@ export const ageSchema = z
       .refine((year) => year > 1900 && year <= new Date().getFullYear(), {
         message: 'Must be in the past',
       }),
+    form: z.string().optional(),
   })
   .refine((age) => age.date <= dayMonths[age.month - 1], {
     message: 'Must be a valid date',
-    path: ['date'],
+    path: ['form'],
   })
 
 export type Age = z.infer<typeof ageSchema>
-
 export type AgeForm = {
+  form?: string
   date: string
   month: string
   year: string
